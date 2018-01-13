@@ -75,16 +75,12 @@ public class SampleDataLoaderImpl implements SampleDataLoader {
 		admin.setAddress("address");
 		admin.setFirstName("Admin");
 		admin.setSurname("Surname");
-                log.error("Admin Status in SampleDataLoaded of member.isAdmin BEFORE MAKING HIM ADMIN ... {}",admin.isAdmin());
-               // admin.setIsAdmin(true);
-                log.error("Admin Status in SampleDataLoaded of member.isAdmin AFTER  admin.setIsAdmin(true); ... {}",admin.isAdmin());
 		admin.setJoinedDate(new Date());
         loanItemService.create(loanItem);
 
 		memberService.registerMember(admin, "password");
 		memberService.registerMember(member, "password");
 		memberService.makeAdmin(admin);
-                log.error("Admin Status in SampleDataLoaded of member.isAdmin AFTER  memberService.makeAdmin(admin);; ... {}",admin.isAdmin());
 		loan.setMember(member);
         loanService.create(loan);
 	}

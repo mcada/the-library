@@ -17,4 +17,60 @@ Then you can build the project simply by executing these commands from the direc
 cd the-library
 mvn clean
 mvn install
+cd web
+mvn tomcat7:run
+http://localhost:8080/pa165/
 ```
+<b> Login information to dummy accounts <b>
+  -----
+With those credentials you can log in to the created accounts.
+```
+test1@test.com - password
+admin@admin.com - password
+```
+#  REST
+  ```
+mvn clean
+mvn install
+cd rest
+mvn tomcat7:run
+  ```
+
+## Books
+http://localhost:8080/pa165/rest/books/
+
+
+### Get all
+Method type: GET
+
+example:
+curl http://localhost:8080/pa165/rest/books/
+
+
+### Get book by ID
+Method type: GET
+http://localhost:8080/pa165/rest/books/{id}
+where id is id of book you want to get.
+
+example:
+curl http://localhost:8080/pa165/rest/books/1
+
+
+### Create book
+Method type: POST
+example:
+curl -H "Content-Type: application/json" -X POST -d '{"author":"New Author","title":"Book Title"}' http://localhost:8080/pa165/rest/books
+
+
+### Update book
+Method type: PUT
+example:
+curl -H "Content-Type: application/json" -X PUT -d '{"author":"New Author","title":"Updated Title"}' http://localhost:8080/pa165/rest/books/2
+
+### Delete
+Method type: DELETE
+http://localhost:8080/pa165/rest/books/{id}
+where id is id of book you want to delete.
+
+example:
+curl -X "DELETE" http://localhost:8080/pa165/rest/books/2
