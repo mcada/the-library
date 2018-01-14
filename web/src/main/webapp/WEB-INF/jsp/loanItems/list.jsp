@@ -39,7 +39,7 @@
                     </td>
                     <td>
                         <c:if test="${authenticatedUser.isAdmin()}">
-                            <form method="post" action="${pageContext.request.contextPath}/loanItem/delete/${loanItem.id}">
+                            <form method="post" action="${pageContext.request.contextPath}/loanItems/delete/${loanItem.id}">
                                 <button type="submit" class="btn btn-primary">Delete</button>
                             </form>
                         </c:if>
