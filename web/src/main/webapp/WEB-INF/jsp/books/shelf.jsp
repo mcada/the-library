@@ -6,17 +6,14 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<my:pagetemplate title="Books">
+<my:pagetemplate title="My shelf">
     <jsp:attribute name="body">
 
+      <div style="float: left; width: 130px">
+            <my:a href="/books/list" class="btn btn-primary">Back to all books</my:a>
+      </div>
       <table class="table">
             <thead>
-            <c:if test="${authenticatedUser.isAdmin()}">
-              <td>
-                  <my:a href="/books/create" class="btn btn-primary">Add new book</my:a>
-              </td>
-            </c:if>
-
             <tr>
                 <th>Id</th>
                 <th>Author</th>
@@ -41,13 +38,8 @@
                     </td>
                     <td>
                         <c:if test="${not empty authenticatedUser}">
-                            <my:a href="/books/loan/${authenticatedUser.getId()}/${book.id}" class="btn btn-primary">Gimme that book!</my:a>
-                        </c:if>
-                    </td>
-                    <td>
-                        <c:if test="${authenticatedUser.isAdmin()}">
-                            <form method="post" action="${pageContext.request.contextPath}/books/delete/${book.id}">
-                                <button type="submit" class="btn btn-primary">Delete</button>
+                            <form method="get" action="${pageContext.request.contextPath}/books/return/${authenticatedUser.getId()}/${book.id}">
+                                <button type="submit" class="btn btn-primary">Return book</button>
                             </form>
                         </c:if>
                     </td>

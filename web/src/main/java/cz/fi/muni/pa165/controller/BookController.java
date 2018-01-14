@@ -2,7 +2,12 @@ package cz.fi.muni.pa165.controller;
 
 import cz.fi.muni.pa165.dto.BookDTO;
 import cz.fi.muni.pa165.dto.CreateBookDTO;
+import cz.fi.muni.pa165.dto.LoanItemDTO;
+import cz.fi.muni.pa165.dto.MemberDTO;
 import cz.fi.muni.pa165.facade.BookFacade;
+import cz.fi.muni.pa165.facade.LoanFacade;
+import cz.fi.muni.pa165.facade.LoanItemFacade;
+import cz.fi.muni.pa165.library.persistance.entity.Loan;
 import cz.fi.muni.pa165.library.persistance.exceptions.DataAccessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,15 +17,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author xchomo, mcada
@@ -34,6 +38,12 @@ public class BookController {
     @Autowired
     private BookFacade bookFacade;
 
+    @Autowired
+    private LoanFacade loanFacade;
+
+    @Autowired
+    private LoanItemFacade loanItemFacade;
+
     @Inject
     public BookController(BookFacade bookFacade) {
         this.bookFacade = bookFacade;
@@ -46,6 +56,13 @@ public class BookController {
         return "books/list";
     }
 
+    @RequestMapping(value = "/shelf/{id}", method = RequestMethod.GET)
+    public String shelf(@PathVariable long id, Model model) throws DataAccessException {
+
+        model.addAttribute("books", loanFacade.allBooksOfMember(id));
+        return "books/shelf";
+    }
+
 
     @RequestMapping(value = "/view/{id}", method = RequestMethod.GET)
     public String view(@PathVariable long id, Model model) {
@@ -54,6 +71,24 @@ public class BookController {
         return "books/view";
     }
 
+    @RequestMapping(value = "/return/{id}/{book}", method = RequestMethod.GET)
+    public String returnBook(@PathVariable long id, @PathVariable Long book, RedirectAttributes redirectAttributes, Model model, UriComponentsBuilder uriBuilder) {
+        //je treba najit vsechny loany uzivatele, v nich najit loan item s danou knihou a ten odstranit
+        bookFacade.removeBookFromUserLoan(id, book);
+        redirectAttributes.addFlashAttribute("alert_success", "Book with id\"" + book + "\" was returned.");
+
+        return "redirect:" + uriBuilder.path("/books/shelf/{id}").buildAndExpand(id).encode().toUriString();
+
+        //return "books/list";
+    }
+
+    @RequestMapping(value = "/loan/{id}/{book}", method = RequestMethod.GET)
+    public String gimmeThatBook(@PathVariable long id, @PathVariable Long book, Model model, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder) {
+        loanFacade.gimmeThatBook(id, book);
+        redirectAttributes.addFlashAttribute("alert_success", "Book with id\"" + book + "\" was loaned.");
+
+        return "redirect:" + uriBuilder.path("/books/shelf/{id}").buildAndExpand(id).encode().toUriString();
+    }
 
     
     @RequestMapping(value = "/create", method = RequestMethod.GET)

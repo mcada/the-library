@@ -152,5 +152,15 @@ public class LoanServiceTest {
         verify(loanDao, ONCE).update(loan1);
     }
 
+    @Test
+    public void booksOfMember() throws DataAccessException {
+        List<Loan> list = new LinkedList<>();
+        list.add(loan1);
+        when(loanDao.allLoansOfMember(member1)).thenReturn(list);
+        loanService.allLoansOfMember(member1);
+        Assert.assertEquals(1, loanService.allBooksOfMember(member1).size());
+
+    }
+
 
 }

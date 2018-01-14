@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.facade;
 
+import cz.fi.muni.pa165.dto.BookDTO;
 import cz.fi.muni.pa165.dto.CreateLoanDTO;
 import cz.fi.muni.pa165.dto.LoanDTO;
 import cz.fi.muni.pa165.library.persistance.exceptions.DataAccessException;
@@ -51,4 +52,9 @@ public interface LoanFacade {
      * @param loanDTO Loan DTO.
      */
     void update(LoanDTO loanDTO) throws DataAccessException;
-}
+
+    List<BookDTO> allBooksOfMember(Long memberId)throws DataAccessException;
+
+    void gimmeThatBook(Long id,Long book);
+
+    }
