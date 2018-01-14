@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="false" session="false" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -13,7 +13,7 @@
         </div>
         <br>
         <br>
-        <c:if test="${authenticatedUser.isIsAdmin()}">
+        <c:if test="${authenticatedUser.isAdmin()}">
             <div style="width: 225px">
                 <form method="post" action="${pageContext.request.contextPath}/loanItems/delete/${loanItem.id}">
                     <button type="submit" class="btn btn-primary">Delete this loanItem</button>

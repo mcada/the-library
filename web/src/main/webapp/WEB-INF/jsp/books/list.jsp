@@ -1,18 +1,22 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="false" session="false" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<my:pagetemplate title="Loan Items">
+<my:pagetemplate title="Books">
     <jsp:attribute name="body">
 
       <table class="table">
             <thead>
-            <td>
-                  <my:a href="/books/create" class="btn btn-primary">Create new book!!!</my:a>
-            </td>
+            <c:if test="${authenticatedUser.isAdmin()}">
+              <td>
+                  <my:a href="/books/create" class="btn btn-primary">Add new book</my:a>
+              </td>
+            </c:if>
+
             <tr>
                 <th>Id</th>
                 <th>Author</th>
@@ -46,7 +50,5 @@
             </c:forEach>
             </tbody>
         </table>
-
-
 </jsp:attribute>
 </my:pagetemplate>

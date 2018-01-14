@@ -43,11 +43,17 @@
 				<c:if test="${authenticatedUser.isAdmin()}">
 					<li><my:a href="/member/list"><f:message key="navigation.admin.members"/></my:a></li>
 				</c:if>
-                                <li><my:a href="/login">Login</my:a></li>
-				<li><my:a href="/login/logoff">Log out</my:a></li>
-			</ul>
-		</div><!--/.nav-collapse -->
-	</div>
+
+				<c:if test="${empty authenticatedUser}">
+            <li><my:a href="/login">Login</my:a></li>
+        </c:if>
+
+        <c:if test="${not empty authenticatedUser}">
+          <li><my:a href="/login/logoff">Log out</my:a></li>
+        </c:if>
+    </ul>
+  </div><!--/.nav-collapse -->
+</div>
 </nav>
 
 <div class="container" style="padding-bottom: 30px">

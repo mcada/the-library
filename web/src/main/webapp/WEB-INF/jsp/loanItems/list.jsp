@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="false" session="false" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -33,12 +33,12 @@
                         <my:a href="/loanItems/view/${loanItem.id}" class="btn btn-primary">Show details</my:a>
                     </td>
                     <td>
-                        <c:if test="${authenticatedUser.isIsAdmin()}">
+                        <c:if test="${authenticatedUser.isAdmin()}">
                             <my:a href="/loanItems/update/${loanItem.id}" class="btn btn-primary">Update</my:a>
                         </c:if>
                     </td>
                     <td>
-                        <c:if test="${authenticatedUser.isIsAdmin()}">
+                        <c:if test="${authenticatedUser.isAdmin()}">
                             <form method="post" action="${pageContext.request.contextPath}/loanItem/delete/${loanItem.id}">
                                 <button type="submit" class="btn btn-primary">Delete</button>
                             </form>
