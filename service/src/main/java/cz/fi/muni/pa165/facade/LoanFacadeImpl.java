@@ -2,12 +2,14 @@ package cz.fi.muni.pa165.facade;
 
 
 import cz.fi.muni.pa165.config.MappingService;
+import cz.fi.muni.pa165.dto.BookDTO;
 import cz.fi.muni.pa165.dto.CreateLoanDTO;
 import cz.fi.muni.pa165.dto.LoanDTO;
 import cz.fi.muni.pa165.library.persistance.entity.Loan;
 import cz.fi.muni.pa165.library.persistance.entity.LoanItem;
 import cz.fi.muni.pa165.library.persistance.entity.Member;
 import cz.fi.muni.pa165.library.persistance.exceptions.DataAccessException;
+import cz.fi.muni.pa165.service.BookService;
 import cz.fi.muni.pa165.service.LoanItemService;
 import cz.fi.muni.pa165.service.LoanService;
 import cz.fi.muni.pa165.service.MemberService;
@@ -36,6 +38,8 @@ public class LoanFacadeImpl implements LoanFacade {
     private MemberService memberService;
     @Inject
     private LoanItemService loanItemService;
+    @Inject
+    private BookService bookService;
 
     public LoanFacadeImpl(LoanService loanService,
                           MemberService memberService,
@@ -84,6 +88,12 @@ public class LoanFacadeImpl implements LoanFacade {
     }
 
     @Override
+    public List<BookDTO> allBooksOfMember(Long memberId)throws DataAccessException {
+        Member member = memberService.findById(memberId);
+        return mappingService.map(loanService.allBooksOfMember(member), BookDTO.class);
+    }
+
+    @Override
     public void delete(Long loanId) throws DataAccessException {
         Loan loan = loanService.findById(loanId);
         loanService.delete(loan);
@@ -94,5 +104,24 @@ public class LoanFacadeImpl implements LoanFacade {
         Loan loan = mappingService.map(loanDTO,Loan.class);
         loanService.update(loan);
     }
+    @Override
+    public void gimmeThatBook(Long id,Long book) {
+        //mam id uzivatele, id knihy co chce pucit --> musim vytvorit loan, do nej strcit novy loanItem s knihou
+        Loan loan = new Loan();
+
+        LoanItem loanItem = new LoanItem();
+        loanItem.setBook(bookService.findById(book));
+        loanItem.setLoan(loan);
+        Set<Loan> loanSet = new HashSet<>();
+        loanSet.add(loan);
+
+        loan.setLoanCreated(new Date());
+
+        loanItemService.create(loanItem);
+
+        loan.setMember(memberService.findById(id));
+        loanService.create(loan);
+    }
+
 
 }

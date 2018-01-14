@@ -36,6 +36,14 @@
 			<ul class="nav navbar-nav">
 				<li><f:message key="navigation.reading"/></li>
 				<li><my:a href="/books/list"><f:message key="navigation.admin.books"/></my:a></li>
+
+
+				<c:if test="${not empty authenticatedUser}">
+                  <li><my:a href="/books/shelf/${authenticatedUser.getId()}">My Shelf :)</my:a></li>
+        </c:if>
+
+
+
 				<li><my:a href="/loans/list"><f:message key="navigation.admin.loans"/></my:a></li>
                                 <li><my:a href="/loanItems/list"><f:message key="navigation.admin.loanItems"/></my:a></li>
                                 

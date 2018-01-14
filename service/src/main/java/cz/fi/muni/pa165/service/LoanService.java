@@ -1,5 +1,6 @@
 package cz.fi.muni.pa165.service;
 
+import cz.fi.muni.pa165.library.persistance.entity.Book;
 import cz.fi.muni.pa165.library.persistance.entity.Loan;
 import cz.fi.muni.pa165.library.persistance.entity.Member;
 import cz.fi.muni.pa165.library.persistance.exceptions.DataAccessException;
@@ -23,4 +24,6 @@ public interface LoanService extends CrudService<Loan> {
     
     List<Loan> allLoansOfMember(Member member) throws DataAccessException;
 
-}
+    List<Book> allBooksOfMember(Member member) throws DataAccessException;
+
+    }

@@ -3,10 +3,12 @@ package cz.fi.muni.pa165.service;
 import cz.fi.muni.pa165.exception.LibraryServiceException;
 import cz.fi.muni.pa165.library.persistance.dao.BookDao;
 import cz.fi.muni.pa165.library.persistance.dao.LoanDao;
+import cz.fi.muni.pa165.library.persistance.dao.LoanItemDao;
 import cz.fi.muni.pa165.library.persistance.dao.base.CrudDao;
 import cz.fi.muni.pa165.library.persistance.entity.Book;
 import cz.fi.muni.pa165.library.persistance.entity.Loan;
 import cz.fi.muni.pa165.library.persistance.entity.LoanItem;
+import cz.fi.muni.pa165.library.persistance.entity.Member;
 import cz.fi.muni.pa165.library.persistance.exceptions.DataAccessException;
 import cz.fi.muni.pa165.service.base.CrudServiceImpl;
 import javax.inject.Inject;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,6 +29,9 @@ public class BookServiceImpl extends CrudServiceImpl<Book> implements BookServic
 
     @Inject
     private LoanDao loanDao;
+
+    @Inject
+    private LoanItemDao loanItemDao;
     
     @Inject
     public BookServiceImpl(BookDao bookDao, LoanDao loanDao) {
@@ -54,5 +60,24 @@ public class BookServiceImpl extends CrudServiceImpl<Book> implements BookServic
         } catch (Exception ex){
             throw new LibraryServiceException("Problem with data", ex);
         }  
+    }
+
+    @Override
+    public void removeBookFromUserLoan(Member member, Long book) {
+        try {
+            List<Loan> allLoans = loanDao.allLoansOfMember(member);
+            for(Loan l: allLoans) {
+                Set<LoanItem> loanItems = l.getLoanItems();
+                for(LoanItem li:loanItems) {
+                    if(li.getBook().getId().longValue() == book.longValue()) {
+                        l.removeLoanItem(li);
+                        loanItemDao.delete(li);
+                        return;
+                    }
+                }
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

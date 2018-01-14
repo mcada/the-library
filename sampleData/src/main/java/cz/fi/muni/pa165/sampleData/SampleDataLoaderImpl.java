@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,62 +30,66 @@ import org.slf4j.LoggerFactory;
 @Transactional
 public class SampleDataLoaderImpl implements SampleDataLoader {
 
-        private static final Logger log = LoggerFactory.getLogger(SampleDataLoaderImpl.class);
-	
-        @Inject
-	private BookService bookService;
+    private static final Logger log = LoggerFactory.getLogger(SampleDataLoaderImpl.class);
 
-	@Inject
-	private LoanItemService loanItemService;
+    @Inject
+    private BookService bookService;
 
-	@Inject
-	private MemberService memberService;
+    @Inject
+    private LoanItemService loanItemService;
 
-	@Inject
-	private LoanService loanService;
+    @Inject
+    private MemberService memberService;
 
-	@Override
-	public void loadData() throws IOException, ParseException, DataAccessException {
-		Book book = new Book();
-		book.setAuthor("Arthur C. Clarke");
-		book.setTitle("2001 Space Oddysey");
-		bookService.create(book);
+    @Inject
+    private LoanService loanService;
 
-		Loan loan = new Loan();
+    @Override
+    public void loadData() throws IOException, ParseException, DataAccessException {
+        Book book = new Book();
+        book.setAuthor("Arthur C. Clarke");
+        book.setTitle("2001 Space Oddysey");
+        bookService.create(book);
 
-		LoanItem loanItem = new LoanItem();
-		loanItem.setBook(book);
-		loanItem.setLoan(loan);
-		Set<Loan> loanSet = new HashSet<>();
-		loanSet.add(loan);
+        Book book1 = new Book();
+        book1.setAuthor("Frederik George Pohl");
+        book1.setTitle("The Gateway Trip: Tales and Vignettes of the Heechee");
+        bookService.create(book1);
+
+        Loan loan = new Loan();
+
+        LoanItem loanItem = new LoanItem();
+        loanItem.setBook(book);
+        loanItem.setLoan(loan);
+        Set<Loan> loanSet = new HashSet<>();
+        loanSet.add(loan);
 
 
-		Member member = new Member();
-		member.setEmail("Test1@test.com");
-		member.setFirstName("Firstname");
-		member.setIsAdmin(false);
-		member.setSurname("Tester");
-		member.setAddress("address");
-		member.setJoinedDate(new Date());
+        Member member = new Member();
+        member.setEmail("Test1@test.com");
+        member.setFirstName("Firstname");
+        member.setIsAdmin(false);
+        member.setSurname("Tester");
+        member.setAddress("address");
+        member.setJoinedDate(new Date());
 
-		loan.setLoanCreated(new Date());
-		member.setLoans(loanSet);
+        loan.setLoanCreated(new Date());
+        member.setLoans(loanSet);
 
-		Member admin = new Member();
-		admin.setEmail("admin@admin.com");
-		admin.setAddress("address");
-		admin.setFirstName("Admin");
-		admin.setSurname("Surname");
-		admin.setJoinedDate(new Date());
+        Member admin = new Member();
+        admin.setEmail("admin@admin.com");
+        admin.setAddress("address");
+        admin.setFirstName("Admin");
+        admin.setSurname("Surname");
+        admin.setJoinedDate(new Date());
         loanItemService.create(loanItem);
 
-		memberService.registerMember(admin, "password");
-		memberService.registerMember(member, "password");
-		memberService.makeAdmin(admin);
-		loan.setMember(member);
+        memberService.registerMember(admin, "password");
+        memberService.registerMember(member, "password");
+        memberService.makeAdmin(admin);
+        loan.setMember(member);
         loanService.create(loan);
-	}
-
+    }
 
 
 }
