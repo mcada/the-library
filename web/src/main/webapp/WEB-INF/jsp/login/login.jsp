@@ -9,7 +9,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="my" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <my:pagetemplate title="User Login">
-    
+
     <jsp:attribute name="body">
        <c:if test="${param.error != null}">
         <div>Invalid credentials.</div>

@@ -49,7 +49,7 @@ public class LoanController {
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
-        return "loans/view";
+        return "loans/detail";
     }
 
 
